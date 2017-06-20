@@ -1,12 +1,12 @@
-''' ''
+# Use watson to directly stream audio
+
 from ws4py.client.threadedclient import WebSocketClient
-import base64, json, ssl, subprocess, threading, time
+import base64, json, ssl, subprocess, threading, time, pyaudio
 
 class SpeechToTextClient(WebSocketClient):
     def __init__(self):
         ws_url = "wss://stream.watsonplatform.net/speech-to-text/api/v1/recognize"
-        username = "f0a00b10-cabb-4368-9a91-344c199ed704"
-        password = "OwuHm7lwfE0E"
+
         auth_string = "%s:%s" % (username, password)
         base64string = base64.encodestring(auth_string).replace("\n", "")
 
@@ -53,33 +53,3 @@ try:
     raw_input()
 finally:
     stt_client.close()
-
-'''
-
-from ws4py.client.threadedclient import WebSocketClient
-import base64, time
-
-class SpeechToTextClient(WebSocketClient):
-    def __init__(self):
-        ws_url = "https://stream.watsonplatform.net/speech-to-text/api"
-
-        username = "f0a00b10-cabb-4368-9a91-344c199ed704"
-        password = "OwuHm7lwfE0E"
-        auth_string = "%s:%s" % (username, password)
-
-        try:
-            WebSocketClient.__init__(self, ws_url,
-                    headers=[("Authorization", "Basic %s" % base64string)])
-            self.connect()
-        except: print "Failed to open WebSocket."
-
-    def opened(self):
-        self.send('{"action": "start", "content-type": "audio/l16;rate=16000"}')
-
-    def received_message(self, message):
-        print message
-
-stt_client = SpeechToTextClient()
-time.sleep(3)
-stt_client.close()
-''' '''
